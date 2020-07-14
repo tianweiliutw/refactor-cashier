@@ -17,41 +17,60 @@ public class OrderReceipt {
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
 
+        printOrder(output);
+
+        return output.toString();
+    }
+
+    private void printOrder(StringBuilder output) {
+        printOrderInfo(output);
+        printLineItemsAndSubtotal(output);
+    }
+
+    private void printOrderInfo(StringBuilder output) {
         // print headers
         output.append("======Printing Orders======\n");
 
         // print date, bill no, customer name
 //        output.append("Date - " + order.getDate();
-        output.append(order.getCustomerName());
-        output.append(order.getCustomerAddress());
-//        output.append(order.getCustomerLoyaltyNumber());
+        if (order.getCustomer() != null) {
+            output.append(order.getCustomer().getName());
+            output.append(order.getCustomer().getAddress());
+//            output.append(order.getCustomerLoyaltyNumber());
+        }
+    }
 
+    private void printLineItemsAndSubtotal(StringBuilder output) {
         // prints lineItems
-        double totSalesTx = 0d;
-        double tot = 0d;
+        double totalSalesTax = 0d;
+        double subTotal = 0d;
         for (LineItem lineItem : order.getLineItems()) {
-            output.append(lineItem.getDescription());
-            output.append('\t');
-            output.append(lineItem.getPrice());
-            output.append('\t');
-            output.append(lineItem.getQuantity());
-            output.append('\t');
-            output.append(lineItem.totalAmount());
-            output.append('\n');
+
+            printLineItem(lineItem, output);
 
             // calculate sales tax @ rate of 10%
-            double salesTax = lineItem.totalAmount() * .10;
-            totSalesTx += salesTax;
+            double salesTax = lineItem.getSalesTax();
+            totalSalesTax += salesTax;
 
             // calculate total amount of lineItem = price * quantity + 10 % sales tax
-            tot += lineItem.totalAmount() + salesTax;
+            subTotal += lineItem.getSubTotal();
         }
 
         // prints the state tax
-        output.append("Sales Tax").append('\t').append(totSalesTx);
+        output.append("Sales Tax").append('\t').append(totalSalesTax);
 
         // print total amount
-        output.append("Total Amount").append('\t').append(tot);
-        return output.toString();
+        output.append("Total Amount").append('\t').append(subTotal);
+    };
+
+    private void printLineItem(LineItem lineItem, StringBuilder output) {
+        output.append(lineItem.getDescription());
+        output.append('\t');
+        output.append(lineItem.getPrice());
+        output.append('\t');
+        output.append(lineItem.getQuantity());
+        output.append('\t');
+        output.append(lineItem.totalAmount());
+        output.append('\n');
     }
 }
