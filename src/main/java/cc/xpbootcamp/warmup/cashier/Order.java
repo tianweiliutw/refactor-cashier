@@ -22,6 +22,10 @@ public class Order {
         printTotal(output, results[0], results[1]);
     }
 
+    public LocalDateTime getTimestamp() {
+        return this.timestamp;
+    }
+
     private void printTimestamp(StringBuilder output) {
         String weekdays = "一二三四五六日";
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日，星期");
@@ -54,6 +58,16 @@ public class Order {
     private void printTotal(StringBuilder output, double totalSalesTax, double subTotal) {
         output.append("--------------------");
         output.append("税额").append('\t').append(totalSalesTax);
-        output.append("总价").append('\t').append(subTotal);
+        double discount = printDiscount(output, subTotal);
+        double subTotalAfterDiscount = Math.round((subTotal - discount) * 100d) / 100d;
+        output.append("总价").append('\t').append(subTotalAfterDiscount);
+    }
+
+    private double printDiscount(StringBuilder output, double subTotal) {
+        double discount = Discount.Decide(subTotal, this);
+        if (discount > 0) {
+            output.append("折扣").append('\t').append(discount);
+        }
+        return discount;
     }
 }
