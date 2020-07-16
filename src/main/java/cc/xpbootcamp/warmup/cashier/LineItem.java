@@ -14,16 +14,15 @@ public class LineItem {
 		this.taxRate = taxRate;
 	}
 
-	public String getDescription() {
-		return desc;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public int getQuantity() {
-		return qty;
+	public void Print(StringBuilder output) {
+		output.append(this.desc);
+		output.append('\t');
+		output.append(this.price);
+		output.append('\t');
+		output.append(this.qty);
+		output.append('\t');
+		output.append(this.totalAmount());
+		output.append('\n');
 	}
 
     double totalAmount() {

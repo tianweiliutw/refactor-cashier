@@ -9,11 +9,8 @@ public class Customer {
         this.address = address;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
+    public void Print(StringBuilder output) {
+        output.append(this.name);
+        output.append(this.address);
     }
 }

@@ -11,11 +11,32 @@ public class Order {
         this.lineItemList = lineItemList;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public void Print(StringBuilder output) {
+        if (this.customer != null) {
+            this.customer.Print(output);
+        }
+        double[] results = printLineItems(output);
+        printTotal(output, results[0], results[1]);
     }
 
-    public List<LineItem> getLineItems() {
-        return lineItemList;
+    private double[] printLineItems(StringBuilder output) {
+        double totalSalesTax = 0d;
+        double subTotal = 0d;
+
+        for (LineItem lineItem : this.lineItemList) {
+
+            lineItem.Print(output);
+
+            double salesTax = lineItem.getSalesTax();
+            totalSalesTax += salesTax;
+            subTotal += lineItem.getSubTotal();
+        }
+
+        return new double[] { totalSalesTax, subTotal };
+    }
+
+    private void printTotal(StringBuilder output, double totalSalesTax, double subTotal) {
+        output.append("Sales Tax").append('\t').append(totalSalesTax);
+        output.append("Total Amount").append('\t').append(subTotal);
     }
 }
