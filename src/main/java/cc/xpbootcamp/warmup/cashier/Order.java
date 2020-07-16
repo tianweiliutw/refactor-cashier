@@ -59,6 +59,10 @@ public class Order {
         output.append("--------------------");
         output.append("税额").append('\t').append(totalSalesTax);
         double discount = printDiscount(output, subTotal);
+        printSubTotal(output, subTotal, discount);
+    }
+
+    private void printSubTotal(StringBuilder output, double subTotal, double discount) {
         double subTotalAfterDiscount = Math.round((subTotal - discount) * 100d) / 100d;
         output.append("总价").append('\t').append(subTotalAfterDiscount);
     }
